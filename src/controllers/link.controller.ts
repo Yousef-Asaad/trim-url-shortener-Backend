@@ -123,7 +123,14 @@ export const redirectToUrl = async (
   try {
     const { code } = req.params;
 
-    if (code === "favicon.ico") {
+   
+    if (req.method !== "GET") {
+      res.status(204).end();
+      return;
+    }
+
+  
+    if (code === "favicon.ico" || code.includes(".") || code.endsWith(".map")) {
       res.status(204).end();
       return;
     }
@@ -135,10 +142,11 @@ export const redirectToUrl = async (
       return;
     }
 
+   
     await Click.create({
       linkId: link._id,
       timestamp: new Date(),
-      referrer: req.get("referrer") || req.get("referer") || "",
+      referrer: req.get("referrer") || req.get("referer") || "Direct",
       userAgent: req.get("user-agent") || "",
     });
 
