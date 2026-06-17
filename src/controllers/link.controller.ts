@@ -123,6 +123,11 @@ export const redirectToUrl = async (
   try {
     const { code } = req.params;
 
+    if (code === "favicon.ico") {
+      res.status(204).end();
+      return;
+    }
+
     const link = await Link.findOne({ shortCode: code });
 
     if (!link) {
